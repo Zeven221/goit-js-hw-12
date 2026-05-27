@@ -74,12 +74,12 @@ refs.formEl.addEventListener('submit', async e => {
     } else {
       showLoadMoreButton();
     }
-  } catch {
+  } catch (e) {
     hideLoader();
     hideLoadMoreButton();
     iziToast.error({
       title: 'Error',
-      message: 'While seach',
+      message: e,
       position: 'topRight',
     });
   }
@@ -98,12 +98,21 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
     return;
   }
   try {
+    refs.loadingTextElem.classList.add('show')
     hideLoadMoreButton();
     const res = await AxiosUserSearch(
       infoAboutPages.currentSearch,
       infoAboutPages.currentPage
     );
     renderItems(res);
+    refs.loadingTextElem.classList.remove('show')
     showLoadMoreButton();
-  } catch {}
+  } catch (e) {
+    hideLoadMoreButton();
+    iziToast.error({
+      title: 'Error',
+      message: e,
+      position: 'topRight',
+    });
+  }
 });
