@@ -19,11 +19,13 @@ export const refs = {
   loadingMoreBtn: document.querySelector('button[data-button="load"]'),
   loadingTextElem: document.querySelector('.loading-more-image'),
 };
+let firstContainerChildY = 0
 export const infoAboutPages = {
   currentPage: 1,
   totalPages: 0,
   currentSearch: '',
 };
+let firstElem;
 refs.formEl.addEventListener('submit', async e => {
   e.preventDefault();
   const formData = new FormData(refs.formEl);
@@ -62,6 +64,12 @@ refs.formEl.addEventListener('submit', async e => {
       return;
     }
     renderItems(res);
+    firstContainerChildY = refs.containerElem.firstChild.getBoundingClientRect().y + 2
+    window.scrollBy({
+      top: refs.containerElem.firstChild.getBoundingClientRect().y,
+      left: 0,
+      behavior: 'smooth',
+    });
     if (infoAboutPages.totalPages < infoAboutPages.currentPage) {
       hideLoadMoreButton();
       iziToast.error({
@@ -98,14 +106,20 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
     return;
   }
   try {
-    refs.loadingTextElem.classList.add('show')
+    refs.loadingTextElem.classList.add('show');
     hideLoadMoreButton();
     const res = await AxiosUserSearch(
       infoAboutPages.currentSearch,
       infoAboutPages.currentPage
     );
     renderItems(res);
-    refs.loadingTextElem.classList.remove('show')
+    firstContainerChildY = refs.containerElem.firstChild.getBoundingClientRect().y + 2
+    window.scrollBy({
+      top: refs.containerElem.firstChild.getBoundingClientRect().y,
+      left: 0,
+      behavior: 'smooth',
+    });
+    refs.loadingTextElem.classList.remove('show');
     showLoadMoreButton();
   } catch (e) {
     hideLoadMoreButton();
