@@ -63,6 +63,7 @@ refs.formEl.addEventListener('submit', async e => {
     }
     renderItems(res);
     hideLoadMoreButton();
+    hideLoader();
     if (infoAboutPages.totalPages < infoAboutPages.currentPage) {
       iziToast.error({
         message: "We're sorry, but you've reached the end of search results",
@@ -73,7 +74,6 @@ refs.formEl.addEventListener('submit', async e => {
       });
       return;
     }
-    showLoadMoreButton();
   } catch {
     hideLoader();
     hideLoadMoreButton();
@@ -107,11 +107,6 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
     refs.loadingTextElem.classList.remove(show);
     showLoadMoreButton();
   } catch {
-    hideLoader();
-    iziToast.error({
-      title: 'Error',
-      message: 'While show more',
-      position: 'topRight',
-    });
+    console.log("We're sorry, but you've reached the end of search results");
   }
 });
