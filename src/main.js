@@ -95,6 +95,6 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
     hideLoadMoreButton();
     
   }
-  const res = AxiosUserSearch(infoAboutPages.currentSearch, infoAboutPages.currentPage);
+  const res = await AxiosUserSearch(infoAboutPages.currentSearch, infoAboutPages.currentPage);
   renderItems(res);
 });
