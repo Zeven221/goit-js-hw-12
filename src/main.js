@@ -17,7 +17,7 @@ export const refs = {
   containerElem: document.querySelector('.gallery'),
   loadingElem: document.querySelector('.loader'),
   loadingMoreBtn: document.querySelector('button[data-button="load"]'),
-  loadingTextElem: document.querySelector('.loading-more-image')
+  loadingTextElem: document.querySelector('.loading-more-image'),
 };
 export const infoAboutPages = {
   currentPage: 1,
@@ -25,6 +25,7 @@ export const infoAboutPages = {
   currentSearch: '',
 };
 refs.formEl.addEventListener('submit', async e => {
+  hideLoadMoreButton();
   e.preventDefault();
   const formData = new FormData(refs.formEl);
   const inputValue = formData.get('search-text').trim();
@@ -49,7 +50,6 @@ refs.formEl.addEventListener('submit', async e => {
   try {
     infoAboutPages.currentSearch = inputValue;
     const res = await AxiosUserSearch(inputValue, infoAboutPages.currentPage);
-    hideLoader();
     if (res.length === 0) {
       iziToast.error({
         message:
@@ -62,6 +62,7 @@ refs.formEl.addEventListener('submit', async e => {
       return;
     }
     renderItems(res);
+    hideLoadMoreButton();
     if (infoAboutPages.totalPages < infoAboutPages.currentPage) {
       iziToast.error({
         message: "We're sorry, but you've reached the end of search results",
@@ -70,15 +71,15 @@ refs.formEl.addEventListener('submit', async e => {
         color: '#EF4040',
         messageColor: '#FAFAFB',
       });
-      hideLoadMoreButton();
-    } else {
-      showLoadMoreButton();
+      return;
     }
-  } catch (e) {
+    showLoadMoreButton();
+  } catch {
     hideLoader();
+    hideLoadMoreButton();
     iziToast.error({
       title: 'Error',
-      message: e,
+      message: 'While seach',
       position: 'topRight',
     });
   }
@@ -86,6 +87,7 @@ refs.formEl.addEventListener('submit', async e => {
 refs.loadingMoreBtn.addEventListener('click', async () => {
   infoAboutPages.currentPage++;
   if (infoAboutPages.totalPages < infoAboutPages.currentPage) {
+    hideLoadMoreButton();
     iziToast.error({
       message: "We're sorry, but you've reached the end of search results",
       position: 'topRight',
@@ -93,23 +95,22 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       color: '#EF4040',
       messageColor: '#FAFAFB',
     });
-    hideLoadMoreButton();
   }
   try {
-    refs.loadingTextElem.classList.add(show)
+    refs.loadingTextElem.classList.add(show);
     hideLoadMoreButton();
     const res = await AxiosUserSearch(
       infoAboutPages.currentSearch,
       infoAboutPages.currentPage
     );
     renderItems(res);
-    refs.loadingTextElem.classList.remove(show)
-    showLoadMoreButton()
-  } catch (e) {
+    refs.loadingTextElem.classList.remove(show);
+    showLoadMoreButton();
+  } catch {
     hideLoader();
     iziToast.error({
       title: 'Error',
-      message: e,
+      message: 'While show more',
       position: 'topRight',
     });
   }
