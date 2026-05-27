@@ -1,5 +1,6 @@
 import axios, { isCancel, AxiosError } from 'axios';
-export function AxiosUserSearch(query) {
+import { infoAboutPages } from '../main';
+export async function AxiosUserSearch(query, page) {
   const url = 'https://pixabay.com/api/';
 
   const params = {
@@ -8,6 +9,16 @@ export function AxiosUserSearch(query) {
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: true,
+    per_page: 15,
+    page: page,
   };
-  return axios.get(url, { params }).then(res => res.data.hits).catch(() => [])
+  try{
+  const res = await axios.get(url, { params })
+  infoAboutPages.totalPages = Math.ceil(res.data.totalHits / params.per_page)
+  return res.data.hits
+  }
+  catch(err){
+    console.log('error:', err)
+  }
+
 }

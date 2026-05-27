@@ -8,7 +8,7 @@ const lightbox = new SimpleLightbox('.gallery-item .gallery-link', {
 });
 export function renderItems(array) {
   const markup = array.map(item => CreateMarkup(item)).join('');
-  refs.containerElem.innerHTML = markup;
+  refs.containerElem.insertAdjacentHTML('beforeend', markup)
   lightbox.refresh()
 }
 function CreateMarkup(elem) {
@@ -47,4 +47,11 @@ export function showLoader() {
 }
 export function hideLoader() {
   refs.loadingElem.style.display = 'none'
+}
+export function showLoadMoreButton(){
+  refs.loadingMoreBtn.style.display = 'block'
+}
+export function hideLoadMoreButton(){
+  refs.loadingMoreBtn.style.display = 'none'
+
 }
