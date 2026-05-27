@@ -82,7 +82,7 @@ refs.formEl.addEventListener('submit', async e => {
     });
   }
 });
-refs.loadingMoreBtn.addEventListener('click', () => {
+refs.loadingMoreBtn.addEventListener('click', async () => {
   infoAboutPages.currentPage++;
   if (infoAboutPages.totalPages < infoAboutPages.currentPage) {
     iziToast.error({
@@ -93,6 +93,8 @@ refs.loadingMoreBtn.addEventListener('click', () => {
       messageColor: '#FAFAFB',
     });
     hideLoadMoreButton();
+    
   }
-  AxiosUserSearch(infoAboutPages.currentSearch, infoAboutPages.currentPage);
+  const res = AxiosUserSearch(infoAboutPages.currentSearch, infoAboutPages.currentPage);
+  renderItems(res);
 });
