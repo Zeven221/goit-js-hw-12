@@ -25,7 +25,6 @@ export const infoAboutPages = {
   currentSearch: '',
 };
 refs.formEl.addEventListener('submit', async e => {
-  hideLoadMoreButton();
   e.preventDefault();
   const formData = new FormData(refs.formEl);
   const inputValue = formData.get('search-text').trim();
@@ -45,11 +44,12 @@ refs.formEl.addEventListener('submit', async e => {
   if (infoAboutPages.currentPage !== 1) {
     infoAboutPages.currentPage = 1;
   }
-  showLoader();
   clearGallery();
   try {
     infoAboutPages.currentSearch = inputValue;
+    showLoader();
     const res = await AxiosUserSearch(inputValue, infoAboutPages.currentPage);
+    hideLoader();
     if (res.length === 0) {
       iziToast.error({
         message:
@@ -62,9 +62,8 @@ refs.formEl.addEventListener('submit', async e => {
       return;
     }
     renderItems(res);
-    hideLoadMoreButton();
-    hideLoader();
     if (infoAboutPages.totalPages < infoAboutPages.currentPage) {
+      hideLoadMoreButton();
       iziToast.error({
         message: "We're sorry, but you've reached the end of search results",
         position: 'topRight',
@@ -72,7 +71,8 @@ refs.formEl.addEventListener('submit', async e => {
         color: '#EF4040',
         messageColor: '#FAFAFB',
       });
-      return;
+    } else {
+      showLoadMoreButton();
     }
   } catch {
     hideLoader();
@@ -95,18 +95,15 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       color: '#EF4040',
       messageColor: '#FAFAFB',
     });
+    return;
   }
   try {
-    refs.loadingTextElem.classList.add(show);
     hideLoadMoreButton();
     const res = await AxiosUserSearch(
       infoAboutPages.currentSearch,
       infoAboutPages.currentPage
     );
     renderItems(res);
-    refs.loadingTextElem.classList.remove(show);
     showLoadMoreButton();
-  } catch {
-    console.log("We're sorry, but you've reached the end of search results");
-  }
+  } catch {}
 });
