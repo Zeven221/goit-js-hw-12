@@ -17,6 +17,7 @@ export const refs = {
   containerElem: document.querySelector('.gallery'),
   loadingElem: document.querySelector('.loader'),
   loadingMoreBtn: document.querySelector('button[data-button="load"]'),
+  loadingTextElem: document.querySelector('.loading-more-image')
 };
 export const infoAboutPages = {
   currentPage: 1,
@@ -93,8 +94,23 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       messageColor: '#FAFAFB',
     });
     hideLoadMoreButton();
-    
   }
-  const res = await AxiosUserSearch(infoAboutPages.currentSearch, infoAboutPages.currentPage);
-  renderItems(res);
+  try {
+    refs.loadingTextElem.classList.add(show)
+    hideLoadMoreButton();
+    const res = await AxiosUserSearch(
+      infoAboutPages.currentSearch,
+      infoAboutPages.currentPage
+    );
+    renderItems(res);
+    refs.loadingTextElem.classList.remove(show)
+    showLoadMoreButton()
+  } catch (e) {
+    hideLoader();
+    iziToast.error({
+      title: 'Error',
+      message: e,
+      position: 'topRight',
+    });
+  }
 });

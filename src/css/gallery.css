@@ -1,65 +1,77 @@
 * {
-    font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
 }
 .form {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 .gallery-item {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #808080;
-    width: 360px;
-    height: 200px;
-    background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #808080;
+  width: 360px;
+  height: 200px;
+  background-color: #ffffff;
 }
 .gallery-link {
-    height: 152px;
-    width: 100%;
+  height: 152px;
+  width: 100%;
 }
 .gallery-item-desc-div {
-    width: 100%;
-    padding: 4px 24px;
+  width: 100%;
+  padding: 4px 24px;
 }
 .gallery-item-desc-list {
-    display: flex;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 1.33333;
-    letter-spacing: 0.04em;
-    color: rgb(46, 47, 66);
-    gap: 28px;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.33333;
+  letter-spacing: 0.04em;
+  color: rgb(46, 47, 66);
+  gap: 28px;
+  align-items: center;
+  justify-content: center;
 }
 .gallery-item-desc-list p {
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 2;
-    letter-spacing: 0.04em;
-    color: #2e2f42;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 2;
+  letter-spacing: 0.04em;
+  color: #2e2f42;
 }
 .gallery-item-desc-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .gallery-image {
-    display: block;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 #load-more-button {
-    display: none;
-    width: 125px;
-    height: 40px;
+  display: none;
+  width: 125px;
+  height: 40px;
+}
+.loading-more-image {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #2e2f42;
+  text-align: center;
+  display: none;
+}
+.loading-more-image.show {
+    display: inline;
 }
