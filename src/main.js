@@ -62,7 +62,9 @@ refs.formEl.addEventListener('submit', async e => {
       });
       return;
     }
-    if (TOTAL_PAGES < CURRENT_PAGE) {
+    if (TOTAL_PAGES > CURRENT_PAGE) {
+      showLoadMoreButton();
+    } else {
       hideLoadMoreButton();
       iziToast.error({
         message: "We're sorry, but you've reached the end of search results",
@@ -71,8 +73,6 @@ refs.formEl.addEventListener('submit', async e => {
         color: '#EF4040',
         messageColor: '#FAFAFB',
       });
-    } else {
-      showLoadMoreButton();
     }
     await renderItems(results.hits);
   } catch (e) {
@@ -87,17 +87,6 @@ refs.formEl.addEventListener('submit', async e => {
 });
 refs.loadingMoreBtn.addEventListener('click', async () => {
   CURRENT_PAGE++;
-  if (TOTAL_PAGES < CURRENT_PAGE) {
-    iziToast.error({
-      message: "We're sorry, but you've reached the end of search results",
-      position: 'topRight',
-      maxWidth: 432,
-      color: '#EF4040',
-      messageColor: '#FAFAFB',
-    });
-    hideLoadMoreButton();
-    return;
-  }
   hideLoadMoreButton();
   showLoading();
   try {
@@ -120,7 +109,16 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       position: 'topRight',
     });
   }
-  if (TOTAL_PAGES > CURRENT_PAGE) {
-    showLoadMoreButton();
+  if (CURRENT_PAGE === TOTAL_PAGES) {
+    hideLoadMoreButton();
+    iziToast.error({
+      message: "We're sorry, but you've reached the end of search results",
+      position: 'topRight',
+      maxWidth: 432,
+      color: '#EF4040',
+      messageColor: '#FAFAFB',
+    });
+  }else {
+    showLoadMoreButton()
   }
 });
