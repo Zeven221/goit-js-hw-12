@@ -8,6 +8,11 @@ const lightbox = new SimpleLightbox('.gallery-item .gallery-link', {
 });
 export function renderItems(array) {
   const markup = array.map(item => CreateMarkup(item)).join('');
+  refs.containerElem.innerHTML = markup
+  lightbox.refresh()
+}
+export function addElem(array) {
+  const markup = array.map(item => CreateMarkup(item)).join('');
   refs.containerElem.insertAdjacentHTML('beforeend', markup)
   lightbox.refresh()
 }

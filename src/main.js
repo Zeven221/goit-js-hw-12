@@ -1,5 +1,6 @@
 import { AxiosUserSearch } from './js/pixabay-api';
 import {
+  addElem,
   clearGallery,
   hideLoader,
   hideLoadMoreButton,
@@ -114,7 +115,7 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       infoAboutPages.currentSearch,
       infoAboutPages.currentPage
     );
-    await renderItems(res);
+    await addElem(res);
     infoaAboutFirstElem.height = infoaAboutFirstElem.height * 2
     window.scrollBy({
       top: infoaAboutFirstElem.height,
