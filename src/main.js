@@ -68,7 +68,7 @@ refs.formEl.addEventListener('submit', async e => {
     renderItems(res);
     infoaAboutFirstElem.height = refs.containerElem.firstChild.getBoundingClientRect().height * 2
     window.scrollBy({
-      top: -infoaAboutFirstElem.height,
+      top: infoaAboutFirstElem.height,
       left: 0,
       behavior: 'smooth',
     });
@@ -117,7 +117,7 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
     renderItems(res);
     infoaAboutFirstElem.height = infoaAboutFirstElem.height * 2
     window.scrollBy({
-      top: -infoaAboutFirstElem.height,
+      top: infoaAboutFirstElem.height,
       left: 0,
       behavior: 'smooth',
     });
