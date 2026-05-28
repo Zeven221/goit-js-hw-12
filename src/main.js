@@ -24,6 +24,7 @@ let TOTAL_PAGES;
 let CURRENT_PAGE;
 let CURRENT_SEACH;
 const PER_PAGE = 15;
+let elementHeight;
 refs.formEl.addEventListener('submit', async e => {
   e.preventDefault();
   hideLoadMoreButton();
@@ -75,6 +76,8 @@ refs.formEl.addEventListener('submit', async e => {
     }
     await renderItems(results.hits);
   } catch (e) {
+    hideLoading();
+    hideLoadMoreButton();
     iziToast.error({
       title: 'Error',
       message: e,
@@ -86,6 +89,7 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
   CURRENT_PAGE++;
   hideLoadMoreButton();
   if (TOTAL_PAGES < CURRENT_PAGE) {
+    hideLoadMoreButton();
     iziToast.error({
       message: "We're sorry, but you've reached the end of search results",
       position: 'topRight',
@@ -98,9 +102,16 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
   showLoading();
   try {
     const res = await AxiosUserSearch(CURRENT_SEACH, CURRENT_PAGE);
-    hideLoading();
     await addElem(res.hits);
+    elementHeight =
+      refs.containerElem.firstElementChild.getBoundingClientRect().height * 2;
+    window.scrollBy({
+      top: elementHeight,
+      left: 0,
+      behavior: 'smooth',
+    });
     if (TOTAL_PAGES < CURRENT_PAGE) {
+      hideLoadMoreButton();
       iziToast.error({
         message: "We're sorry, but you've reached the end of search results",
         position: 'topRight',
@@ -113,6 +124,8 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       showLoadMoreButton();
     }
   } catch (e) {
+    hideLoadMoreButtonLoadMoreButton();
+    hideLoading();
     iziToast.error({
       title: 'Error',
       message: e,
