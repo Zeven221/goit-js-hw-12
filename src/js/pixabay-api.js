@@ -1,5 +1,4 @@
 import axios, { isCancel, AxiosError } from 'axios';
-import { infoAboutPages } from '../main';
 export async function AxiosUserSearch(query, page) {
   const url = 'https://pixabay.com/api/';
 
@@ -14,8 +13,7 @@ export async function AxiosUserSearch(query, page) {
   };
   try{
   const res = await axios.get(url, { params })
-  infoAboutPages.totalPages = Math.ceil(res.data.totalHits / params.per_page)
-  return res.data.hits
+  return res.data
   }
   catch(err){
     console.log('error:', err)

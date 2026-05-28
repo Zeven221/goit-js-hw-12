@@ -47,16 +47,17 @@ function CreateMarkup(elem) {
 export function clearGallery() {
   refs.containerElem.innerHTML = '';
 }
-export function showLoader() {
-  refs.loadingElem.style.display = 'inline-block'
-}
-export function hideLoader() {
-  refs.loadingElem.style.display = 'none'
-}
+
 export function showLoadMoreButton(){
   refs.loadingMoreBtn.style.display = 'block'
 }
 export function hideLoadMoreButton(){
   refs.loadingMoreBtn.style.display = 'none'
 
+}
+export function showLoading(){
+  refs.loadingTextElem.classList.add('show')
+}
+export function hideLoading(){
+  refs.loadingTextElem.classList.remove('show')
 }

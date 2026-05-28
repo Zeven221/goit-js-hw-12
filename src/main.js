@@ -2,10 +2,10 @@ import { AxiosUserSearch } from './js/pixabay-api';
 import {
   addElem,
   clearGallery,
-  hideLoader,
+  hideLoading,
   hideLoadMoreButton,
   renderItems,
-  showLoader,
+  showLoading,
   showLoadMoreButton,
 } from './js/render-functions';
 // Описаний у документації
@@ -20,17 +20,13 @@ export const refs = {
   loadingMoreBtn: document.querySelector('button[data-button="load"]'),
   loadingTextElem: document.querySelector('.loading-more-image'),
 };
-export const infoAboutPages = {
-  currentPage: 1,
-  totalPages: 0,
-  currentSearch: '',
-};
-const infoaAboutFirstElem = {
-  height: 0,
-
-}
+let TOTAL_PAGES;
+let CURRENT_PAGE;
+let CURRENT_SEACH;
+const PER_PAGE = 15;
 refs.formEl.addEventListener('submit', async e => {
   e.preventDefault();
+  hideLoadMoreButton();
   const formData = new FormData(refs.formEl);
   const inputValue = formData.get('search-text').trim();
   if (inputValue.length === 0) {
@@ -46,16 +42,15 @@ refs.formEl.addEventListener('submit', async e => {
     });
     return;
   }
-  if (infoAboutPages.currentPage !== 1) {
-    infoAboutPages.currentPage = 1;
-  }
+  CURRENT_SEACH = inputValue;
+  CURRENT_PAGE = 1;
   clearGallery();
+  showLoading();
   try {
-    infoAboutPages.currentSearch = inputValue;
-    showLoader();
-    const res = await AxiosUserSearch(inputValue, infoAboutPages.currentPage);
-    hideLoader();
-    if (res.length === 0) {
+    const results = await AxiosUserSearch(inputValue, CURRENT_PAGE);
+    hideLoading();
+    TOTAL_PAGES = Math.ceil(results.totalHits / PER_PAGE);
+    if (results.hits.length === 0) {
       iziToast.error({
         message:
           'Sorry, there are no images matching your search query. Please try again!',
@@ -66,14 +61,7 @@ refs.formEl.addEventListener('submit', async e => {
       });
       return;
     }
-    await renderItems(res);
-    infoaAboutFirstElem.height = refs.containerElem.firstChild.getBoundingClientRect().height * 2
-    window.scrollBy({
-      top: infoaAboutFirstElem.height,
-      left: 0,
-      behavior: 'smooth',
-    });
-    if (infoAboutPages.totalPages < infoAboutPages.currentPage) {
+    if (TOTAL_PAGES <= CURRENT_PAGE) {
       hideLoadMoreButton();
       iziToast.error({
         message: "We're sorry, but you've reached the end of search results",
@@ -85,9 +73,8 @@ refs.formEl.addEventListener('submit', async e => {
     } else {
       showLoadMoreButton();
     }
+    await renderItems(results.hits);
   } catch (e) {
-    hideLoader();
-    hideLoadMoreButton();
     iziToast.error({
       title: 'Error',
       message: e,
@@ -96,9 +83,9 @@ refs.formEl.addEventListener('submit', async e => {
   }
 });
 refs.loadingMoreBtn.addEventListener('click', async () => {
-  infoAboutPages.currentPage++;
-  if (infoAboutPages.totalPages < infoAboutPages.currentPage) {
-    hideLoadMoreButton();
+  CURRENT_PAGE++;
+  hideLoadMoreButton();
+  if (TOTAL_PAGES < CURRENT_PAGE) {
     iziToast.error({
       message: "We're sorry, but you've reached the end of search results",
       position: 'topRight',
@@ -108,24 +95,24 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
     });
     return;
   }
+  showLoading();
   try {
-    refs.loadingTextElem.classList.add('show');
-    hideLoadMoreButton();
-    const res = await AxiosUserSearch(
-      infoAboutPages.currentSearch,
-      infoAboutPages.currentPage
-    );
-    await addElem(res);
-    infoaAboutFirstElem.height = infoaAboutFirstElem.height * 2
-    window.scrollBy({
-      top: infoaAboutFirstElem.height,
-      left: 0,
-      behavior: 'smooth',
-    });
-    refs.loadingTextElem.classList.remove('show');
-    showLoadMoreButton();
+    const res = await AxiosUserSearch(CURRENT_SEACH, CURRENT_PAGE);
+    hideLoading();
+    await addElem(res.hits);
+    if (TOTAL_PAGES < CURRENT_PAGE) {
+      iziToast.error({
+        message: "We're sorry, but you've reached the end of search results",
+        position: 'topRight',
+        maxWidth: 432,
+        color: '#EF4040',
+        messageColor: '#FAFAFB',
+      });
+      return;
+    } else {
+      showLoadMoreButton();
+    }
   } catch (e) {
-    hideLoadMoreButton();
     iziToast.error({
       title: 'Error',
       message: e,
