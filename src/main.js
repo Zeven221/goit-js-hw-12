@@ -101,7 +101,7 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       behavior: 'smooth',
     });
   } catch (e) {
-    hideLoadMoreButtonLoadMoreButton();
+    hideLoadMoreButton();
     hideLoading();
     iziToast.error({
       title: 'Error',
