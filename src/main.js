@@ -62,7 +62,7 @@ refs.formEl.addEventListener('submit', async e => {
       });
       return;
     }
-    if (TOTAL_PAGES <= CURRENT_PAGE) {
+    if (TOTAL_PAGES < CURRENT_PAGE) {
       hideLoadMoreButton();
       iziToast.error({
         message: "We're sorry, but you've reached the end of search results",
@@ -87,9 +87,7 @@ refs.formEl.addEventListener('submit', async e => {
 });
 refs.loadingMoreBtn.addEventListener('click', async () => {
   CURRENT_PAGE++;
-  hideLoadMoreButton();
   if (TOTAL_PAGES < CURRENT_PAGE) {
-    hideLoadMoreButton();
     iziToast.error({
       message: "We're sorry, but you've reached the end of search results",
       position: 'topRight',
@@ -97,12 +95,15 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       color: '#EF4040',
       messageColor: '#FAFAFB',
     });
+    hideLoadMoreButton();
     return;
   }
+  hideLoadMoreButton();
   showLoading();
   try {
     const res = await AxiosUserSearch(CURRENT_SEACH, CURRENT_PAGE);
     await addElem(res.hits);
+    hideLoading();
     elementHeight =
       refs.containerElem.firstElementChild.getBoundingClientRect().height * 2;
     window.scrollBy({
@@ -110,19 +111,6 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       left: 0,
       behavior: 'smooth',
     });
-    if (TOTAL_PAGES < CURRENT_PAGE) {
-      hideLoadMoreButton();
-      iziToast.error({
-        message: "We're sorry, but you've reached the end of search results",
-        position: 'topRight',
-        maxWidth: 432,
-        color: '#EF4040',
-        messageColor: '#FAFAFB',
-      });
-      return;
-    } else {
-      showLoadMoreButton();
-    }
   } catch (e) {
     hideLoadMoreButtonLoadMoreButton();
     hideLoading();
@@ -131,5 +119,8 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       message: e,
       position: 'topRight',
     });
+  }
+  if (TOTAL_PAGES > CURRENT_PAGE) {
+    showLoadMoreButton();
   }
 });
