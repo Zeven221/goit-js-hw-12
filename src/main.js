@@ -19,13 +19,15 @@ export const refs = {
   loadingMoreBtn: document.querySelector('button[data-button="load"]'),
   loadingTextElem: document.querySelector('.loading-more-image'),
 };
-let firstContainerChildY = 0
 export const infoAboutPages = {
   currentPage: 1,
   totalPages: 0,
   currentSearch: '',
 };
-let firstElem;
+const infoaAboutFirstElem = {
+  height: 0,
+
+}
 refs.formEl.addEventListener('submit', async e => {
   e.preventDefault();
   const formData = new FormData(refs.formEl);
@@ -64,9 +66,9 @@ refs.formEl.addEventListener('submit', async e => {
       return;
     }
     renderItems(res);
-    firstContainerChildY = refs.containerElem.firstChild.getBoundingClientRect().y + 2
+    infoaAboutFirstElem.height = refs.containerElem.firstChild.getBoundingClientRect().height * 2
     window.scrollBy({
-      top: refs.containerElem.firstChild.getBoundingClientRect().y,
+      top: -infoaAboutFirstElem.height,
       left: 0,
       behavior: 'smooth',
     });
@@ -113,9 +115,9 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       infoAboutPages.currentPage
     );
     renderItems(res);
-    firstContainerChildY = refs.containerElem.firstChild.getBoundingClientRect().y + 2
+    infoaAboutFirstElem.height = infoaAboutFirstElem.height * 2
     window.scrollBy({
-      top: refs.containerElem.firstChild.getBoundingClientRect().y,
+      top: -infoaAboutFirstElem.height,
       left: 0,
       behavior: 'smooth',
     });
