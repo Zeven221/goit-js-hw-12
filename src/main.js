@@ -65,7 +65,7 @@ refs.formEl.addEventListener('submit', async e => {
       });
       return;
     }
-    renderItems(res);
+    await renderItems(res);
     infoaAboutFirstElem.height = refs.containerElem.firstChild.getBoundingClientRect().height * 2
     window.scrollBy({
       top: infoaAboutFirstElem.height,
@@ -114,7 +114,7 @@ refs.loadingMoreBtn.addEventListener('click', async () => {
       infoAboutPages.currentSearch,
       infoAboutPages.currentPage
     );
-    renderItems(res);
+    await renderItems(res);
     infoaAboutFirstElem.height = infoaAboutFirstElem.height * 2
     window.scrollBy({
       top: infoaAboutFirstElem.height,
